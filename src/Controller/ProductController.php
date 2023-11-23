@@ -14,11 +14,13 @@ class ProductController extends AbstractController
     /**
      * @Route("/", name="product_list")
      */
-    public function productList(): Response
+    public function productList(Request $request): Response
     {
+        $session = $request->getSession();
+        $cart = $session->get('cart', []);
         $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
     
-        return $this->render('product/list.html.twig', ['products' => $products]);
+        return $this->render('product/list.html.twig', ['cart' => $cart,'products' => $products]);
     }
 
     /**
@@ -63,16 +65,18 @@ class ProductController extends AbstractController
         $session->set('cart', $cart);
 
         if ($request->isXmlHttpRequest()) {
-            return new JsonResponse(['success' => true, 'message' => 'Product added to cart']);
+            $cartCount = count($session->get('cart', []));
+    
+            return new JsonResponse(['success' => true, 'message' => 'Product added to cart', 'cartCount' => $cartCount]);
         }
-
+    
         return $this->redirectToRoute('shopping_cart');
     }
 
     /**
      * @Route("/remove-from-cart/{index}", name="remove_from_cart")
      */
-    public function removeFromCart(Request $request, int $index): Response
+    public function removeFromCart(Request $request, int $index): JsonResponse
     {
         $session = $request->getSession();
         $cart = $session->get('cart', []);
@@ -80,8 +84,24 @@ class ProductController extends AbstractController
         if (isset($cart[$index])) {
             unset($cart[$index]);
             $session->set('cart', array_values($cart));
+
+            return new JsonResponse(['success' => true, 'message' => 'Product removed from cart']);
         }
 
-        return $this->redirectToRoute('shopping_cart');
+        return new JsonResponse(['success' => false, 'message' => 'Product not found in cart']);
+    }
+
+    /**
+     * @Route("/checkout", name="checkout")
+     */
+    public function checkout(Request $request): JsonResponse
+    {
+       
+
+        //  clear the cart 
+        $session = $request->getSession();
+        $session->set('cart', []);
+
+        return new JsonResponse(['success' => true, 'message' => 'Checkout successful']);
     }
 }

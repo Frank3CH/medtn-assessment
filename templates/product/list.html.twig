@@ -1,25 +1,38 @@
-<h2>Product List</h2>
-<table>
-    <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Short Description</th>
-        <th>Taxonomy Terms</th>
-        <th>Price</th>
-        <th>Action</th>
-    </tr>
-    {% for product in products %}
-        <tr>
-            <td>{{ product.title }}</td>
-            <td>{{ product.description }}</td>
-            <td>{{ product.shortDescription }}</td>
-            <td>
-                {% for term in product.taxonomyTerms %}
-                    {{ term.term }}{% if not loop.last %}, {% endif %}
-                {% endfor %}
-            </td>
-            <td>${{ product.price }}</td>
-            <td><a href="{{ path('add_to_cart', {'id': product.id}) }}">Add to Cart</a></td>
-        </tr>
-    {% endfor %}
-</table>
+{% extends 'base.html.twig' %}
+{% block body %}
+
+
+   <div class="container">
+        <h1 class="mt-3 mb-4">Products</h1>
+                <div id="success-alert" class="alert alert-success mt-3" style="display: none;"></div>
+        <div id="error-alert" class="alert alert-danger mt-3" style="display: none;"></div>
+  
+        <div class="row">
+        
+            {% for product in products %}
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <img src="https://via.placeholder.com/200x150" alt="{{ product.title }}" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.title }}</h5>
+                            <p class="card-text">{{ product.description }}
+                            </p>
+                            <p class="card-text">{{ product.shortDescription }}
+                            </p>
+                            <p>{% for term in product.taxonomyTerms %}
+                                    {{ term.term }}{% if not loop.last %}|{% endif %}
+                            {% endfor %}</p>
+                                <div class="d-flex justify-content-between align-item-center">
+                                        
+                                
+                                <a href="{{ path('add_to_cart', {'id': product.id}) }}" class="btn btn-dark add-to-cart" data-product-id="{{ product.id }}">Add to Cart</a>
+
+                                <span class="h5 mt-auto">{{ product.price }} $</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

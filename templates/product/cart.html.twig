@@ -1,20 +1,65 @@
-<h2>Shopping Cart</h2>
-<table>
-    <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Price</th>
-        <th>Action</th>
-    </tr>
-    {% for key, product in cart %}
-        <tr>
-            <td>{{ product.title }}</td>
-            <td>{{ product.description }}</td>
-            <td>${{ product.price }}</td>
-            <td><a href="{{ path('remove_from_cart', {'index': key}) }}">Remove</a></td>
-        </tr>
-    {% endfor %}
-</table>
-<p>Total: ${{ totalPrice|number_format(2) }}</p>
+{% extends 'base.html.twig' %}
 
+{% block body %}
 
+   <div class="container mt-4">
+        <h1>Your Cart</h1>
+        <div id="success-alert" class="alert alert-success mt-3" style="display: none;"></div>
+        <div id="error-alert" class="alert alert-danger mt-3" style="display: none;"></div>
+        <div class="row mt-4">
+        {% if cart is not empty %}
+            <!-- List of items -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-dark text-white d-flex">
+                        <h5>Items</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for key, product in cart %}
+                            <li class="list-group-item d-flex">
+                                   <li class="list-group-item d-flex">
+                                    <div class="flex-fill mr-2">
+                                        <img src="https://via.placeholder.com/200x150" width="64" alt="Product image">
+                                    </div>
+                                    <div class="flex-fill mr-2">
+                                        <h5 class="mt-0 mb-0"> {{ product.title }}</h5>
+                                        <small>{{ product.description[:50] }}...</small>
+                                        <div class="form-inline mt-2">
+                                            <a href="#" class="btn btn-dark btn-sm remove-from-cart" data-index="{{ key }}">Remove</a>
+                                        </div>
+                                    </div>
+                                    <div class="flex-fill mr-2 text-right">
+                                        <b>${{ product.price }}$</b>
+                                    </div>
+                                </li>
+                           
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Summary -->
+            <div class="col-md-4">
+                <div class="card mt-4 mt-md-0">
+                    <h5 class="card-header bg-dark text-white">Summary</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <div><b>Total</b></div>
+                            <span><b> ${{ totalPrice|number_format(2) }}</b></span>
+                        </li>
+                    </ul>
+                    <div class="card-body">
+                        <a href="#" class="btn btn-warning w-100" id="checkout-button">Checkout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+            <div class="alert alert-info mt-4">
+                Your cart is empty. Go to the <a href="{{ path('product_list') }}">product list</a>.
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

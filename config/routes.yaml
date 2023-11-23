@@ -1,0 +1,19 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+
+product_list:
+    path: /
+    controller: App\Controller\ProductController::productList
+
+shopping_cart:
+    path: /cart
+    controller: App\Controller\ProductController::shoppingCart
+
+add_to_cart:
+    path: /add-to-cart/{id}
+    controller: App\Controller\ProductController::addToCart
+
+remove_from_cart:
+    path: /remove-from-cart/{index}
+    controller: App\Controller\ProductController::removeFromCart

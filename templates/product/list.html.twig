@@ -1,0 +1,25 @@
+<h2>Product List</h2>
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Short Description</th>
+        <th>Taxonomy Terms</th>
+        <th>Price</th>
+        <th>Action</th>
+    </tr>
+    {% for product in products %}
+        <tr>
+            <td>{{ product.title }}</td>
+            <td>{{ product.description }}</td>
+            <td>{{ product.shortDescription }}</td>
+            <td>
+                {% for term in product.taxonomyTerms %}
+                    {{ term.term }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+            <td>${{ product.price }}</td>
+            <td><a href="{{ path('add_to_cart', {'id': product.id}) }}">Add to Cart</a></td>
+        </tr>
+    {% endfor %}
+</table>

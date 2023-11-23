@@ -1,0 +1,1 @@
+Build a simple shopping cart page that allows a user to add or remove products to their cart. The cart itself should be a very simple table display. The user should be able to pick from a list of products that are presented to them on the page.
